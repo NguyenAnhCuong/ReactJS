@@ -1,41 +1,33 @@
 //class component
 //function component
 import React from "react";
+import AddUser from "./AddUser";
+import DisplayInfo from "./DisplayInfo";
 
 class MyComponent extends React.Component {
   //JSX - chi chua dc 1 parent element
+  state = {
+    listUser: [
+      { id: 1, name: "alisia", age: "46" },
+      { id: 2, name: "belic", age: "34" },
+      { id: 3, name: "vivian", age: "21" },
+    ],
+  };
+  handleAddUser = (userInfo) => {
+    this.setState({
+      listUser: [userInfo, ...this.state.listUser],
+    });
+  };
+
   render() {
+    //DRY: dont repeat yourself
     return (
       <div>
-        Hello {this.state.name} and im {this.state.age}
-        <button onMouseOver={this.handleOnMouseOver}>Hover</button>
-        <button
-          onClick={(event) => {
-            this.handleClick(event);
-          }}
-        >
-          Click
-        </button>
+        <AddUser handleAddUser={this.handleAddUser}></AddUser>
+        <hr />
+        <DisplayInfo listUser={this.state.listUser}></DisplayInfo>
       </div>
     );
-  }
-  state = {
-    name: "A",
-    add: "ha noi",
-    age: 25,
-  };
-  handleClick(event) {
-    // console.log(event.target);
-    // console.log(this.state.name);
-    this.setState({
-      name: "Ban",
-    });
-    this.setState({
-      age: Math.floor(Math.random() * 100 + 1),
-    });
-  }
-  handleOnMouseOver(event) {
-    console.log(event.pageX);
   }
 }
 
