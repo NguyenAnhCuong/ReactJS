@@ -1,12 +1,22 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { FcPlus } from "react-icons/fc";
+import { postCreateUser } from "../../../API/userService";
 const ModalCreateUser = (props) => {
-  const [show, setShow] = useState(false);
+  const { show, setShow } = props;
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = () => {
+    setShow(false);
+    setEmail("");
+    setPassword("");
+    setRole("USER");
+    setUsername("");
+    setImage("");
+    setPreviewImg("");
+  };
+  // const handleShow = () => setShow(true);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,11 +34,49 @@ const ModalCreateUser = (props) => {
     }
   };
 
+  function validateEmail(sEmail) {
+    var filter =
+      /^([\w-\.\+]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+    if (filter.test(sEmail)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  const handleSubmitUser = async () => {
+    //validate
+    const isValidEmail = validateEmail(email);
+    if (!isValidEmail) {
+      toast.error("Invalid Email");
+      return;
+    }
+    if (!password) {
+      toast.error("Invalid password");
+      return;
+    }
+    if (!username) {
+      toast.error("Invalid User Name");
+      return;
+    }
+
+    let respone = await postCreateUser(email, password, username, role, image);
+    console.log("respone", respone);
+
+    if (respone && respone.EC === 0) {
+      toast.success(respone.EM);
+      handleClose();
+      await props.fetchListUser();
+    }
+    if (respone && respone.EC !== 0) {
+      toast.error(respone.EM);
+    }
+  };
+
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      {/* <Button variant="primary" onClick={handleShow}>
         Launch demo modal
-      </Button>
+      </Button> */}
 
       <Modal
         className="modal-add-user"
@@ -79,6 +127,7 @@ const ModalCreateUser = (props) => {
                 <label className="form'label">Role</label>
                 <select
                   className="form-select"
+                  value={role}
                   onChange={(event) => setRole(event.target.value)}
                 >
                   <option value="USER">User</option>
@@ -117,7 +166,7 @@ const ModalCreateUser = (props) => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={() => handleSubmitUser()}>
             Save
           </Button>
         </Modal.Footer>

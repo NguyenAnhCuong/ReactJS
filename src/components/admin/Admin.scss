@@ -2,17 +2,16 @@
   display: flex;
   .admin-sidebar {
     .pro-sidebar {
-      height: 100vh !important;
+      height: 100% !important;
     }
   }
-  .admin-sidebar {
+  .admin-content {
+    width: 100%;
     .admin-header {
-      width: 100%;
       height: 40px;
       border: 1px solid green;
     }
     .admin-main {
-      border: 1px solid red;
     }
   }
 }
