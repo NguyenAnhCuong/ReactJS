@@ -1,13 +1,28 @@
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-
+import { deleteUsers } from "../../../API/userService";
+import { toast } from "react-toastify";
 const DeleteUser = (props) => {
   const { show, setShow, dataDelete } = props;
 
   const handleClose = () => setShow(false);
 
-  const handleSubmitDelete = () => {};
+  const handleSubmitDelete = async () => {
+    let respone = await deleteUsers(dataDelete.id);
+    console.log("respone", respone);
+
+    if (respone && respone.EC === 0) {
+      toast.success(respone.EM);
+      handleClose();
+      props.setCurrentPage(1);
+      await props.fetchListUserPaginate(1);
+    }
+    if (respone && respone.EC !== 0) {
+      toast.error(respone.EM);
+    }
+  };
+
   return (
     <>
       <Modal show={show} onHide={handleClose} backdrop="static">
