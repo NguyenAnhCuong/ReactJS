@@ -9,8 +9,28 @@ const Login = (props) => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  function validateEmail(sEmail) {
+    var filter =
+      /^([\w-\.\+]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+    if (filter.test(sEmail)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   const handleLogin = async () => {
     //validate
+
+    const isValidEmail = validateEmail(email);
+    if (!isValidEmail) {
+      toast.error("Invalid Email");
+      return;
+    }
+    if (!password) {
+      toast.error("Invalid password");
+      return;
+    }
 
     //api
     const response = await postLogin(email, password);
@@ -30,7 +50,7 @@ const Login = (props) => {
     <div className="login-container">
       <div className="header">
         <span>Not have account??</span>
-        <button>Sign Up</button>
+        <button onClick={() => navigate("/register")}>Sign Up</button>
       </div>
       <div className="title col-4 mx-auto">Quizz</div>
       <div className="welcome col-4 mx-auto">Hello</div>
