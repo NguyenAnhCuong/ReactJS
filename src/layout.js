@@ -8,6 +8,16 @@ import ManageUser from "./components/admin/Content/ManageUser.js";
 import Dashboard from "./components/admin/Content/Dashboard.js";
 import Login from "./components/Auth/Login.js";
 import Register from "./components/Auth/Register.js";
+import ListQuiz from "./components/users/ListQuiz.js";
+import DetailQuiz from "./components/users/DetailQuiz.js";
+
+const NotFound = () => {
+  return (
+    <div className="container mt-3 alert alert-danger">
+      404.Not Found data with your current URL
+    </div>
+  );
+};
 
 const Layout = (props) => {
   return (
@@ -15,8 +25,9 @@ const Layout = (props) => {
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<HomePage />}></Route>
-          <Route path="users" element={<User />}></Route>
+          <Route path="users" element={<ListQuiz />}></Route>
         </Route>
+        <Route path="/quiz/:id" element={<DetailQuiz />}></Route>
 
         <Route path="/admins" element={<Admin />}>
           <Route index element={<Dashboard />}></Route>
@@ -25,6 +36,7 @@ const Layout = (props) => {
 
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register></Register>} />
+        <Route path="*" element={<NotFound />}></Route>
       </Routes>
 
       <ToastContainer

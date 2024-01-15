@@ -34,9 +34,29 @@
       width: 100%;
       margin: 20px 0px;
       height: 50px;
+      &:disabled {
+        background-color: rgba(196, 193, 193, 0.493);
+        color: gray;
+        cursor: no-drop;
+      }
     }
     .back {
       cursor: pointer;
+    }
+    .loading-icon {
+      font-size: 14px;
+      margin-bottom: 3px;
+      margin-right: 5px;
+      color: rgb(18, 154, 207);
+      animation: spin 1s infinite linear;
+    }
+    @keyframes spin {
+      from {
+        transform: scale(1) rotate(0deg);
+      }
+      to {
+        transform: scale(1) rotate(360deg);
+      }
     }
   }
 }

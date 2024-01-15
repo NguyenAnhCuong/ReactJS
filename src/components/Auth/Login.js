@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./login.scss";
+import { FaSpinner } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { postLogin } from "../../API/userService";
 import { toast } from "react-toastify";
@@ -10,6 +11,7 @@ const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   function validateEmail(sEmail) {
@@ -34,7 +36,7 @@ const Login = (props) => {
       toast.error("Invalid password");
       return;
     }
-
+    setIsLoading(true);
     //api
     const response = await postLogin(email, password);
     console.log(response);
@@ -42,10 +44,12 @@ const Login = (props) => {
     if (response && response.EC === 0) {
       dispatch(doLogin(response));
       toast.success(response.EM);
+      setIsLoading(false);
       navigate("/");
     }
     if (response && +response.EC !== 0) {
       toast.error(response.EM);
+      setIsLoading(false);
       setPassword("");
     }
   };
@@ -81,8 +85,13 @@ const Login = (props) => {
         </div>
         <span className="forgot-password">Forgot password?</span>
         <div>
-          <button onClick={() => handleLogin()} className="btn btn-dark">
-            Login to Quizz
+          <button
+            disabled={isLoading}
+            onClick={() => handleLogin()}
+            className="btn btn-dark"
+          >
+            {isLoading === true && <FaSpinner className="loading-icon" />}
+            <span>Login to Quizz</span>
           </button>
         </div>
         <div className="text-center">
