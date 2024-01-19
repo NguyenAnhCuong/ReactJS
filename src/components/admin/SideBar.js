@@ -9,7 +9,7 @@ import {
   SidebarContent,
 } from "react-pro-sidebar";
 import "./SideBar.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FaTachometerAlt,
   FaGem,
@@ -22,6 +22,7 @@ import { GiReactor } from "react-icons/gi";
 import sidebarBg from "../assets/bg2.jpg";
 import { MdDashboard } from "react-icons/md";
 const SideBar = (props) => {
+  const navigate = useNavigate();
   const { image, collapsed, toggled, handleToggleSidebar } = props;
   return (
     <>
@@ -46,7 +47,7 @@ const SideBar = (props) => {
             }}
           >
             <GiReactor size={"3em"} color={"00bfff"}></GiReactor>
-            <span>ReactJS</span>
+            <span onClick={() => navigate("/")}>ReactJS</span>
           </div>
         </SidebarHeader>
 
@@ -64,7 +65,11 @@ const SideBar = (props) => {
                 Quan li User
                 <Link to="/admins/manage-users"></Link>
               </MenuItem>
-              <MenuItem> Quan li Quiz</MenuItem>
+              <MenuItem>
+                {" "}
+                Quan li Quiz
+                <Link to="/admins/manage-quiz"></Link>
+              </MenuItem>
               <MenuItem> Quan li Cau hoi</MenuItem>
             </SubMenu>
           </Menu>
