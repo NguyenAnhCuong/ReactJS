@@ -61,16 +61,17 @@ const SideBar = (props) => {
           <Menu iconShape="circle">
             <SubMenu title="Features" icon={<FaGem />}>
               <MenuItem>
-                {" "}
                 Quan li User
                 <Link to="/admins/manage-users"></Link>
               </MenuItem>
               <MenuItem>
-                {" "}
                 Quan li Quiz
                 <Link to="/admins/manage-quiz"></Link>
               </MenuItem>
-              <MenuItem> Quan li Cau hoi</MenuItem>
+              <MenuItem>
+                Quan li Cau hoi
+                <Link to="/admins/manage-question"></Link>
+              </MenuItem>
             </SubMenu>
           </Menu>
         </SidebarContent>
