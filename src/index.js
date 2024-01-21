@@ -9,6 +9,7 @@ import Layout from "./layout";
 import { PersistGate } from "redux-persist/integration/react";
 import "nprogress/nprogress.css";
 import "react-perfect-scrollbar/dist/css/styles.css";
+import "react-18-image-lightbox/style.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

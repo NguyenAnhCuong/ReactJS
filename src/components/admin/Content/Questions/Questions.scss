@@ -14,12 +14,13 @@
     .group-upload {
       padding-top: 15px;
       .label-up {
-        height: 30px;
-        border: 1px solid red;
-        border-radius: 5px;
-        padding: 0px 10px;
+        color: purple;
+        font-size: 25px;
         margin-right: 5px;
         cursor: pointer;
+        &:hover {
+          color: #4400ff;
+        }
       }
     }
     .btn-add {
@@ -28,12 +29,18 @@
         font-size: 30px;
         color: red;
         cursor: pointer;
+        &:hover {
+          color: #0989ff;
+        }
       }
       .icon-remove {
         margin-left: 10px;
         font-size: 30px;
         color: blue;
         cursor: pointer;
+        &:hover {
+          color: #ff7608;
+        }
       }
     }
   }
@@ -55,12 +62,18 @@
         font-size: 30px;
         color: red;
         cursor: pointer;
+        &:hover {
+          color: #0989ff;
+        }
       }
       .icon-remove {
         margin-left: 10px;
         font-size: 30px;
         color: blue;
         cursor: pointer;
+        &:hover {
+          color: #ff7608;
+        }
       }
     }
   }
