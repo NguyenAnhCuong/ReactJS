@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
-import "./Questions.scss";
-import _ from "lodash";
+import "./UpdateQ&A.scss";
+import _, { reject } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import {
   getAllQuizForAdmin,
+  getQuizWithQA,
   postCreateNewAnswerForQuestion,
   postCreateNewQuestionForQuiz,
+  postUpsertQA,
 } from "../../../../API/userService";
 import { TbHeartPlus } from "react-icons/tb";
 import { BsFillPatchPlusFill, BsFillFileMinusFill } from "react-icons/bs";
@@ -15,7 +17,7 @@ import { RiImageAddFill } from "react-icons/ri";
 import Lightbox from "react-18-image-lightbox";
 import { toast } from "react-toastify";
 
-const Questions = () => {
+const UpdateQA = () => {
   const initQuestion = [
     {
       id: uuidv4(),
@@ -37,6 +39,42 @@ const Questions = () => {
   useEffect(() => {
     fetchQuiz();
   }, []);
+
+  useEffect(() => {
+    if (selectedQuiz && selectedQuiz.value) {
+      fetchQuizWithQA();
+    }
+  }, [selectedQuiz]);
+
+  function urltoFile(url, filename, mimeType) {
+    return fetch(url)
+      .then(function (res) {
+        return res.arrayBuffer();
+      })
+      .then(function (buf) {
+        return new File([buf], filename, { type: mimeType });
+      });
+  }
+
+  const fetchQuizWithQA = async () => {
+    let res = await getQuizWithQA(selectedQuiz.value);
+    if (res && res.EC === 0) {
+      let newQA = [];
+      for (let i = 0; i < res.DT.qa.length; i++) {
+        let q = res.DT.qa[i];
+        if (q.imageFile) {
+          q.imageName = `Question-${q.id}.png`;
+          q.imageFile = await urltoFile(
+            `data:image/png;base64,${q.imageFile}`,
+            `question-${q.id}.png`,
+            "image/png"
+          );
+        }
+        newQA.push(q);
+      }
+      setQuestions(newQA);
+    }
+  };
 
   const fetchQuiz = async () => {
     let res = await getAllQuizForAdmin();
@@ -129,6 +167,7 @@ const Questions = () => {
           return answer;
         }
       );
+
       setQuestions(questionClone);
     }
   };
@@ -180,48 +219,34 @@ const Questions = () => {
       return;
     }
 
-    //submit question
-    // await Promise.all(
-    //   questions.map(async (value) => {
-    //     const question = await postCreateNewQuestionForQuiz(
-    //       +selectedQuiz.value,
-    //       value.description,
-    //       value.imageFile
-    //     );
-    //     //submit answer
-    //     await Promise.all(
-    //       value.answers.map(async (answer) => {
-    //         await postCreateNewAnswerForQuestion(
-    //           answer.description,
-    //           answer.isCorrect,
-    //           question.DT.id
-    //         );
-    //       })
-    //     );
-    //   console.log(question);
-    // })
-    // );
-
-    for (const question of questions) {
-      const res = await postCreateNewQuestionForQuiz(
-        +selectedQuiz.value,
-        question.description,
-        question.imageFile
-      );
-
-      //submit answer
-      for (const answer of question.answers) {
-        await postCreateNewAnswerForQuestion(
-          answer.description,
-          answer.isCorrect,
-          res.DT.id
-        );
+    let questionClone = _.cloneDeep(questions);
+    for (let i = 0; i < questionClone.length; i++) {
+      if (questionClone[i].imageFile) {
+        questionClone[i].imageFile = await toBase64(questionClone[i].imageFile);
       }
     }
 
-    toast.success("create question and answer success");
-    setQuestions(initQuestion);
+    let res = await postUpsertQA({
+      quizId: selectedQuiz.value,
+      questions: questionClone,
+    });
+    if (res && res.EC === 0) {
+      toast.success(res.EM);
+      console.log("submit", res);
+      fetchQuizWithQA();
+    } else {
+      toast.error(res.EM);
+    }
+
+    // setQuestions(initQuestion);
   };
+  const toBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
 
   const handlePreviewImage = (questionId) => {
     let questionClone = _.cloneDeep(questions);
@@ -235,11 +260,10 @@ const Questions = () => {
       setIsPreviewImage(true);
     }
   };
+  console.log("1:", questions);
 
   return (
     <div className="question-container">
-      <div className="title">Manage Question</div>
-      <hr />
       <div className="add-new-question">
         <div className="col-6 form-group">
           <label className="mb-2">Select Quiz:</label>
@@ -320,7 +344,7 @@ const Questions = () => {
                   return (
                     <div key={answer.id} className="answer-content">
                       <input
-                        className="form-check-input isCorrect"
+                        className="form-check-input iscorrect"
                         type="checkbox"
                         onChange={(event) =>
                           handleAnswerQuestion(
@@ -397,4 +421,4 @@ const Questions = () => {
     </div>
   );
 };
-export default Questions;
+export default UpdateQA;
