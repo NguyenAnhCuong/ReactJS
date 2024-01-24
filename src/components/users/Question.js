@@ -1,7 +1,11 @@
 import _ from "lodash";
+import { useState } from "react";
+import Lightbox from "react-18-image-lightbox";
 
 const Question = (props) => {
   const { dataQuiz, currentQuiz } = props;
+  const [isPreviewImage, setIsPreviewImage] = useState(false);
+
   if (_.isEmpty(dataQuiz)) {
     return <></>;
   }
@@ -14,7 +18,18 @@ const Question = (props) => {
     <>
       {dataQuiz.image ? (
         <div className="quiz-image">
-          <img src={`data:image/jpeg;base64,${dataQuiz.image}`} />
+          <img
+            style={{ cursor: "pointer" }}
+            onClick={() => setIsPreviewImage(true)}
+            src={`data:image/jpeg;base64,${dataQuiz.image}`}
+          />
+          {isPreviewImage === true && (
+            <Lightbox
+              mainSrc={`data:image/jpeg;base64,${dataQuiz.image}`}
+              imageCaption={"Question Image"}
+              onCloseRequest={() => setIsPreviewImage(false)}
+            ></Lightbox>
+          )}
         </div>
       ) : (
         <div className="quiz-image"></div>

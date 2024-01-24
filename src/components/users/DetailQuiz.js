@@ -6,6 +6,7 @@ import _ from "lodash";
 import Question from "./Question";
 import { toast } from "react-toastify";
 import ModalResult from "./ModalResult";
+import RightContent from "./RightContent/RightContent";
 const DetailQuiz = (props) => {
   const params = useParams();
   const quizId = params.id;
@@ -167,7 +168,9 @@ const DetailQuiz = (props) => {
           </button>
         </div>
       </div>
-      <div className="right-content"></div>
+      <div className="right-content">
+        <RightContent dataQuiz={dataQuiz} handleFinish={handleFinish} />
+      </div>
       <ModalResult
         dataModal={dataModal}
         show={isShowModalResult}
