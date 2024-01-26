@@ -6,6 +6,7 @@ import { postLogin } from "../../API/userService";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { doLogin } from "../../redux/action/userAction";
+import Language from "../header/Language";
 
 const Login = (props) => {
   const [email, setEmail] = useState("");
@@ -65,6 +66,7 @@ const Login = (props) => {
       <div className="header">
         <span>Not have account??</span>
         <button onClick={() => navigate("/register")}>Sign Up</button>
+        <Language />
       </div>
       <div className="title col-4 mx-auto">Quizz</div>
       <div className="welcome col-4 mx-auto">Hello</div>

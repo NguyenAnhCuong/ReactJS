@@ -1,0 +1,12 @@
+{
+  "homepage": {
+    "title1": "co cach tot hon de hoi"
+  },
+  "description": {
+    "description1": "Ban khong can phai hoc vi ban rat ngu"
+  },
+  "button": {
+    "login": "Bat dau",
+    "quiz": "Lam Quiz"
+  }
+}

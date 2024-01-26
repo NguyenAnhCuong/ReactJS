@@ -93,3 +93,8 @@ video {
   top: 6vw;
   width: 50vw;
 }
+.languages {
+  .dropdown-toggle::after {
+    display: none !important;
+  }
+}

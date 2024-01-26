@@ -13,6 +13,7 @@ import DetailQuiz from "./components/users/DetailQuiz.js";
 import ManageQuiz from "./components/admin/Content/Quiz/ManageQuiz.js";
 import Questions from "./components/admin/Content/Questions/Questions.js";
 import PrivateRoute from "./routes/PrivateRoute.js";
+import { Suspense } from "react";
 
 const NotFound = () => {
   return (
@@ -24,7 +25,7 @@ const NotFound = () => {
 
 const Layout = (props) => {
   return (
-    <>
+    <Suspense fallback={<div>Loading...</div>}>
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<HomePage />}></Route>
@@ -69,7 +70,7 @@ const Layout = (props) => {
         draggable
         pa
       />
-    </>
+    </Suspense>
   );
 };
 export default Layout;
