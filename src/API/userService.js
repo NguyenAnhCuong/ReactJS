@@ -126,8 +126,12 @@ const postUpsertQA = (data) => {
     ...data,
   });
 };
+const getOverview = () => {
+  return axios.get(`api/v1/overview`);
+};
 
 export {
+  getOverview,
   postUpsertQA,
   getQuizWithQA,
   logout,

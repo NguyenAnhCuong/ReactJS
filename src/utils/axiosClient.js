@@ -30,6 +30,10 @@ axiosClient.interceptors.response.use(
     return response && response.data ? response.data : response;
   },
   function (error) {
+    //token expired
+    if (error.respone.data && error.respone.data.EC === -999) {
+      window.location.href = "/login";
+    }
     return error && error.respone && error.respone.data
       ? error.response.data
       : Promise.reject(error);

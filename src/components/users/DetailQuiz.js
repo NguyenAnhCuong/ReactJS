@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, NavLink } from "react-router-dom";
 import { getDataQuiz, postSubmitQuiz } from "../../API/userService";
 import "./DetailQuiz.scss";
 import _ from "lodash";
@@ -7,6 +7,7 @@ import Question from "./Question";
 import { toast } from "react-toastify";
 import ModalResult from "./ModalResult";
 import RightContent from "./RightContent/RightContent";
+import { Breadcrumb } from "react-bootstrap";
 const DetailQuiz = (props) => {
   const params = useParams();
   const quizId = params.id;
@@ -39,6 +40,7 @@ const DetailQuiz = (props) => {
             item.answers.isTheSelected = false;
             answers.push(item.answers);
           });
+          answers = _.orderBy(answers, ["id"], ["asc"]);
 
           return {
             questionId: key,
@@ -123,64 +125,75 @@ const DetailQuiz = (props) => {
   };
 
   return (
-    <div className="detail-quiz-container">
-      <div className="left-content">
-        <div className="title">
-          Quiz {quizId}:{location?.state?.quizTitle}
+    <>
+      <Breadcrumb className="quiz-detail-new-header">
+        <NavLink to="/" className="breadcrumb-item">
+          Home
+        </NavLink>
+        <NavLink to="/users" className="breadcrumb-item">
+          Users
+        </NavLink>
+        <Breadcrumb.Item active>Doing Quiz</Breadcrumb.Item>
+      </Breadcrumb>
+      <div className="detail-quiz-container">
+        <div className="left-content">
+          <div className="title">
+            Quiz {quizId}:{location?.state?.quizTitle}
+          </div>
+          <hr />
+          <div className="quiz-body">
+            <img src={""} />
+          </div>
+          <div className="quiz-content">
+            <Question
+              handleCheckBox={handleCheckBox}
+              currentQuiz={currentQuiz}
+              dataQuiz={
+                dataQuiz && dataQuiz.length > 0 ? dataQuiz[currentQuiz] : []
+              }
+            />
+          </div>
+          <div className="footer">
+            <button
+              className="btn btn-secondary"
+              onClick={() => {
+                handlePrev();
+              }}
+            >
+              Prev
+            </button>
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                handleNext();
+              }}
+            >
+              Next
+            </button>
+            <button
+              className="btn btn-warning"
+              onClick={() => {
+                handleFinish();
+              }}
+            >
+              Finish
+            </button>
+          </div>
         </div>
-        <hr />
-        <div className="quiz-body">
-          <img src={""} />
-        </div>
-        <div className="quiz-content">
-          <Question
-            handleCheckBox={handleCheckBox}
-            currentQuiz={currentQuiz}
-            dataQuiz={
-              dataQuiz && dataQuiz.length > 0 ? dataQuiz[currentQuiz] : []
-            }
+        <div className="right-content">
+          <RightContent
+            setCurrentQuiz={setCurrentQuiz}
+            dataQuiz={dataQuiz}
+            handleFinish={handleFinish}
           />
         </div>
-        <div className="footer">
-          <button
-            className="btn btn-secondary"
-            onClick={() => {
-              handlePrev();
-            }}
-          >
-            Prev
-          </button>
-          <button
-            className="btn btn-primary"
-            onClick={() => {
-              handleNext();
-            }}
-          >
-            Next
-          </button>
-          <button
-            className="btn btn-warning"
-            onClick={() => {
-              handleFinish();
-            }}
-          >
-            Finish
-          </button>
-        </div>
+        <ModalResult
+          dataModal={dataModal}
+          show={isShowModalResult}
+          setShow={setIsShowModalResult}
+        ></ModalResult>
       </div>
-      <div className="right-content">
-        <RightContent
-          setCurrentQuiz={setCurrentQuiz}
-          dataQuiz={dataQuiz}
-          handleFinish={handleFinish}
-        />
-      </div>
-      <ModalResult
-        dataModal={dataModal}
-        show={isShowModalResult}
-        setShow={setIsShowModalResult}
-      ></ModalResult>
-    </div>
+    </>
   );
 };
 export default DetailQuiz;

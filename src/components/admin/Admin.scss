@@ -8,8 +8,21 @@
   .admin-content {
     width: 100%;
     .admin-header {
-      height: 40px;
-      border: 1px solid green;
+      height: 60px;
+      border-bottom: 1px solid rgb(15, 15, 15);
+      display: flex;
+      justify-content: space-between;
+      padding: 0px 20px 0px 20px;
+      align-items: center;
+      .leftside {
+        cursor: pointer;
+        font-size: 20px;
+        color: black;
+      }
+      .rightside {
+        display: flex;
+        gap: 15px;
+      }
     }
     .admin-main {
       height: calc(100vh - 50px);
